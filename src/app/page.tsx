@@ -9,6 +9,10 @@ export default function Home() {
         <h1 className="mt-12 lg:mt-16 text-6xl font-bold">Livepeer Frame</h1>
         <p className="mt-12 max-w-lg mx-auto">
           Make your Livepeer video/stream available only to your NFT holders.
+          <br />
+          <br />
+          Create a link to your video that will only be accessible to holders of
+          certain NFT collection.
         </p>
         <div className="mt-12">
           <p className="max-w-lg mx-auto">Get started:</p>
@@ -17,11 +21,11 @@ export default function Home() {
               <p className="font-mono text-green-500">Create new frame</p>
             </div>
           </Link>
-          <Link href="/edit">
+          {/* <Link href="/edit">
             <div className="px-4 py-2 mt-4 w-max mx-auto bg-gray-900 rounded-lg">
               <p className="font-mono text-green-500">Edit existing</p>
             </div>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </main>
