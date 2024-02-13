@@ -37,13 +37,15 @@ export async function checkOwnership(
 
   //   console.log(results)
 
-  for (const result in results) {
-    console.log(result)
+  for (const r of results) {
     // check this
-    if (result && Number(result) >= 1) {
+    if (r.result && Number(r.result) >= 1) {
+      console.log('ownership check passed')
       return true
     }
   }
+
+  console.log('ownership check failed')
 
   return false
 }
