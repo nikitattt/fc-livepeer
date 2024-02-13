@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { FrameRequest, getFrameMessage } from '@coinbase/onchainkit'
-import { Livepeer } from 'livepeer'
 import Redis from 'ioredis'
 import { VideoShareData } from '@/utils/types'
 import { checkOwnership } from '@/lib/checkOwnership'
 
 const NEYNAR_KEY = process.env.NEYNAR_KEY
-const LIVEPEER_KEY = process.env.LIVEPEER_KEY
 
 const redisClient = new Redis(process.env.REDIS_URL!)
-
-// const livepeer = new Livepeer({
-//   apiKey: LIVEPEER_KEY
-// })
 
 export async function POST(
   req: NextRequest,
