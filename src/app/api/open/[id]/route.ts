@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { FrameRequest, getFrameMessage } from '@coinbase/onchainkit'
-import { loadProposals } from '@/lib/proposals'
 import { Livepeer } from 'livepeer'
 import Redis from 'ioredis'
 import { VideoShareData } from '@/utils/types'
+import { checkOwnership } from '@/lib/checkOwnership'
 
 const NEYNAR_KEY = process.env.NEYNAR_KEY
 const LIVEPEER_KEY = process.env.LIVEPEER_KEY
@@ -40,17 +40,42 @@ export async function POST(
 
   const wallets = message.interactor.verified_accounts
 
+  if (wallets.length === 0) {
+    const imageUrl = `${process.env.HOST}/no-wallets.jpg`
+
+    return new NextResponse(
+      `<!DOCTYPE html>
+      <html>
+        <head>
+          <title>No wallets!</title>
+          <meta property="og:title" content="You need to add at least 1 wallet!" />
+          <meta property="og:image" content="${imageUrl}" />
+          <meta name="fc:frame" content="vNext" />
+          <meta name="fc:frame:image" content="${imageUrl}" />
+        </head>
+        <body />
+      </html>`,
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/html'
+        }
+      }
+    )
+  }
+
   const requirement = data.requirement
   const chain = requirement[0]
   const address = requirement[1]
   const tokenId = requirement[2]
 
+  const ownershipPassed = await checkOwnership(wallets, chain, address, tokenId)
+
   // using view created contract calls to check if any wallet in wallets owns token for the contract address
 
-  let accessAllowed = false
   let response
 
-  if (accessAllowed) {
+  if (ownershipPassed) {
     const postUrl = `https://lvpr.tv?v=${data.playbackId}`
     const imageUrl = `${process.env.HOST}/all-good.jpg`
 

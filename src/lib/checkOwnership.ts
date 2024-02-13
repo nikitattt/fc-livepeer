@@ -34,6 +34,17 @@ export async function checkOwnership(
     //@ts-ignore
     contracts: calls
   })
+
+  console.log(results)
+
+  for (const result in results) {
+    // check this
+    if (result === '0') {
+      return true
+    }
+  }
+
+  return false
 }
 
 export const constructContractCall = (
