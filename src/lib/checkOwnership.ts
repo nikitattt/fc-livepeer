@@ -35,11 +35,12 @@ export async function checkOwnership(
     contracts: calls
   })
 
-  console.log(results)
+  //   console.log(results)
 
   for (const result in results) {
+    console.log(result)
     // check this
-    if (result === '0') {
+    if (result && Number(result) >= 1) {
       return true
     }
   }

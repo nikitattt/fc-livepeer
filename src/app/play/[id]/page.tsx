@@ -21,7 +21,7 @@ export async function generateMetadata({
       'fc:frame': 'vNext',
       'fc:frame:image': imageUrl,
       'fc:frame:post_url': postUrl,
-      'fc:frame:button:1': 'Watch video'
+      'fc:frame:button:1': 'Check eligibility and watch video'
     }
   }
 }

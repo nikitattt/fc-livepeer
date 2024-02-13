@@ -28,16 +28,6 @@ export async function POST(
     return new NextResponse('Unauthorized', { status: 401 })
   }
 
-  const id = params.id
-
-  const dataString = await redisClient.get(id)
-
-  if (!dataString) {
-    return new NextResponse('Not found', { status: 404 })
-  }
-
-  const data = JSON.parse(dataString) as VideoShareData
-
   const wallets = message.interactor.verified_accounts
 
   if (wallets.length === 0) {
@@ -64,7 +54,21 @@ export async function POST(
     )
   }
 
-  const requirement = data.requirement
+  console.log(wallets)
+
+  const id = params.id
+
+  const dataString = await redisClient.get(id)
+
+  if (!dataString) {
+    return new NextResponse('Not found', { status: 404 })
+  }
+
+  const data = JSON.parse(dataString) as VideoShareData
+
+  console.log(data)
+
+  const requirement = data.requirement.split(':')
   const chain = requirement[0]
   const address = requirement[1]
   const tokenId = requirement[2]
