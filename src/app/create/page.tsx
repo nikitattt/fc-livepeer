@@ -34,7 +34,7 @@ export default function Home() {
 
     await redisClient.set(shareId, JSON.stringify(dataToStore))
 
-    redirect(`/create/${shareId}?editId=${editId}`)
+    redirect(`/create/${shareId}_${editId}`)
   }
 
   return (
