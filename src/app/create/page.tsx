@@ -1,49 +1,40 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
 import Redis from 'ioredis'
-import { useState } from 'react'
 import { VideoShareData } from '@/utils/types'
 import { v4 as uuidv4 } from 'uuid'
 import { randomBytes } from 'crypto'
 import Image from 'next/image'
-
-const redisClient = new Redis(process.env.REDIS_URL!)
+import { redirect } from 'next/navigation'
 
 export default function Home() {
-  // const [formData, setFormData] = useState<VideoShareData>({
-  //   shareId: '',
-  //   editId: '',
-  //   ownerFid: 0,
-  //   playbackId: '',
-  //   title: '',
-  //   requirementDescription: '',
-  //   requirement: ''
-  // })
-
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target
-  //   setFormData({ ...formData, [name]: value })
-  // }
-
   const createFrame = async (formData: FormData) => {
     'use server'
+
+    const redisClient = new Redis(process.env.REDIS_URL!)
 
     const shareId = uuidv4()
     const editId = randomBytes(4).toString('hex').slice(0, 8)
 
-    const title = formData.get('title')
+    const title = formData.get('title')!.toString()
+    const requirementDescription = formData
+      .get('requirementDescription')!
+      .toString()
+    const requirement = formData.get('requirement')!.toString()
+    const ownerFid = Number(formData.get('ownerFid')!.toString())
+    const playbackId = formData.get('playbackId')!.toString()
 
-    console.log(title)
+    const dataToStore: VideoShareData = {
+      title: title,
+      requirementDescription: requirementDescription,
+      requirement: requirement,
+      ownerFid: ownerFid,
+      playbackId: playbackId,
+      shareId: shareId,
+      editId: editId
+    }
 
-    // const dataToStore: VideoShareData = {
-    //   ...formData,
-    //   shareId,
-    //   editId
-    // }
+    await redisClient.set(shareId, JSON.stringify(dataToStore))
 
-    // await redisClient.set(shareId, JSON.stringify(dataToStore))
-
-    // Redirect to a success page or display a success message
+    redirect(`/create/${shareId}?editId=${editId}`)
   }
 
   return (
@@ -68,6 +59,7 @@ export default function Home() {
       >
         <div className="w-full">
           <input
+            required
             type="text"
             name="title"
             placeholder="Title"
@@ -80,6 +72,7 @@ export default function Home() {
         </div>
         <div className="w-full">
           <input
+            required
             type="text"
             name="requirementDescription"
             placeholder="Requirements Description"
@@ -92,6 +85,7 @@ export default function Home() {
         </div>
         <div className="w-full">
           <input
+            required
             type="text"
             name="requirement"
             placeholder="Chain:Address:Optional Token Id"
@@ -111,6 +105,7 @@ export default function Home() {
         </div>
         <div className="w-full">
           <input
+            required
             type="text"
             name="ownerFid"
             placeholder="Your Farcaster FID"
@@ -123,6 +118,7 @@ export default function Home() {
         </div>
         <div className="w-full">
           <input
+            required
             type="text"
             name="playbackId"
             placeholder="Playback ID"
