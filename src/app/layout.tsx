@@ -5,8 +5,9 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Upload to Ipfs',
-  description: 'Get some image saved to ipfs and share it with others',
+  title: 'Token gate Livepeer video/stream',
+  description:
+    'Create a link to your video that will only be accessible to holders of certain NFT collection.',
   icons: {
     icon: '/icon/icon.png',
     apple: [
