@@ -2,95 +2,105 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FrameRequest, getFrameMessage } from '@coinbase/onchainkit'
 import { loadProposals } from '@/lib/proposals'
 import { Livepeer } from 'livepeer'
+import Redis from 'ioredis'
+import { VideoShareData } from '@/utils/types'
 
 const NEYNAR_KEY = process.env.NEYNAR_KEY
 const LIVEPEER_KEY = process.env.LIVEPEER_KEY
 
-const livepeer = new Livepeer({
-  apiKey: LIVEPEER_KEY
-})
+const redisClient = new Redis(process.env.REDIS_URL!)
+
+// const livepeer = new Livepeer({
+//   apiKey: LIVEPEER_KEY
+// })
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { dao: string } }
+  { params }: { params: { id: string } }
 ) {
-  // const body: FrameRequest = await req.json()
+  const body: FrameRequest = await req.json()
 
-  // TODO: Think about verifying the data.
-  // I'm not sure we need to check the validity
-  // of the data as we don't use it in any meaningful way,
-  // but I'm not 100% on this and need to check with @v streams
+  const { isValid, message } = await getFrameMessage(body, {
+    neynarApiKey: NEYNAR_KEY
+  })
 
-  // const { isValid, message } = await getFrameMessage(body, {
-  //   neynarApiKey: NEYNAR_KEY
-  // })
-
-  // if (!isValid) {
-  //   return new NextResponse('Unauthorized', { status: 401 })
-  // }
-
-  const id = ''
-
-  const stream = await livepeer.stream.get(id)
-
-  // stream.stream.
-
-  const proposals = await loadProposals()
-
-  const propsOnPage = 3
-  const numProposals = proposals.length
-
-  const pagesTotal = Math.ceil(numProposals / propsOnPage)
-  const proposalsLeft = pagesTotal > 1 ? numProposals - propsOnPage : 0
-
-  const propLinks = []
-  const ids = []
-
-  for (let i = 0; i < numProposals; i++) {
-    const proposal = proposals[i]
-    const buttonId = i + 1
-    const propId = proposal.id
-    const url = `https://nouns.wtf/vote/${propId}`
-
-    ids.push(propId)
-
-    propLinks.push(
-      `<meta name="fc:frame:button:${buttonId}" content="Prop #${propId}" />
-      <meta name="fc:frame:button:${buttonId}:action" content="link" />
-      <meta name="fc:frame:button:${buttonId}:target" content="${url}" />`
-    )
+  if (!isValid) {
+    return new NextResponse('Unauthorized', { status: 401 })
   }
 
-  const idsQueryParam = ids.join(',')
+  const id = params.id
 
-  const postUrl = `${process.env.HOST}/api/props/nouns`
-  const imageUrl = `${process.env.HOST}/api/images/props/nouns?ids=${encodeURIComponent(idsQueryParam)}`
+  const dataString = await redisClient.get(id)
 
-  console.log(imageUrl)
+  if (!dataString) {
+    return new NextResponse('Not found', { status: 404 })
+  }
 
-  const response = new NextResponse(
-    `<!DOCTYPE html>
+  const data = JSON.parse(dataString) as VideoShareData
+
+  const wallets = message.interactor.verified_accounts
+
+  const requirement = data.requirement
+  const chain = requirement[0]
+  const address = requirement[1]
+  const tokenId = requirement[2]
+
+  // using view created contract calls to check if any wallet in wallets owns token for the contract address
+
+  let accessAllowed = false
+  let response
+
+  if (accessAllowed) {
+    const postUrl = `https://lvpr.tv?v=${data.playbackId}`
+    const imageUrl = `${process.env.HOST}/all-good.jpg`
+
+    response = new NextResponse(
+      `<!DOCTYPE html>
       <html>
         <head>
-          <title>Nouns DAO props!</title>
-          <meta property="og:title" content="Here is active Nouns DAO props!" />
+          <title>Watch the video!</title>
+          <meta property="og:title" content="You can watch the video!" />
           <meta property="og:image" content="${imageUrl}" />
           <meta name="fc:frame" content="vNext" />
-          <meta name="fc:frame:post_url" content="${postUrl}" />
           <meta name="fc:frame:image" content="${imageUrl}" />
-          ${propLinks.join('')}
+          <meta name="fc:frame:button:1" content="Watch video" />
+          <meta name="fc:frame:button:1:action" content="link" />
+          <meta name="fc:frame:button:1:target" content="${postUrl}" />
         </head>
         <body />
       </html>`,
-    {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/html'
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/html'
+        }
       }
-    }
-  )
+    )
+  } else {
+    const imageUrl = `${process.env.HOST}/api/images/no-pass/${id}`
 
-  response.headers.set('Cache-Control', 'max-age=900, stale-while-revalidate')
+    response = new NextResponse(
+      `<!DOCTYPE html>
+      <html>
+        <head>
+          <title>Oops, no access!</title>
+          <meta property="og:title" content="Access haven't been granted to you." />
+          <meta property="og:image" content="${imageUrl}" />
+          <meta name="fc:frame" content="vNext" />
+          <meta name="fc:frame:image" content="${imageUrl}" />
+        </head>
+        <body />
+      </html>`,
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/html'
+        }
+      }
+    )
+  }
+
+  // response.headers.set('Cache-Control', 'max-age=900, stale-while-revalidate')
 
   return response
 }

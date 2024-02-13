@@ -101,6 +101,10 @@ export default function Home() {
             <br />
             If ERC1155 provide address:id, like this:{' '}
             <span className="text-red-500">eth:0x66...e468:3</span>.
+            <br />
+            Supported chains: <span className="text-red-500">eth</span>,{' '}
+            <span className="text-red-500">base</span>,{' '}
+            <span className="text-red-500">optimism</span>.
           </p>
         </div>
         <div className="w-full">

@@ -1,0 +1,50 @@
+import { createPublicClient, fallback, http } from 'viem'
+import { mainnet } from 'viem/chains'
+
+import erc721ABI from './abi/erc721.json'
+import erc1155ABI from './abi/erc1155.json'
+
+const ANKR_KEY = process.env.ANKR_KEY
+
+export async function checkOwnership(
+  userAddresses: string[],
+  chain: string,
+  tokenAddress: string,
+  tokenId?: string
+) {
+  const ankr = http(`https://rpc.ankr.com/${chain}/${ANKR_KEY}`)
+
+  const client = createPublicClient({
+    chain: mainnet,
+    transport: fallback([ankr]),
+    batch: {
+      multicall: true
+    }
+  })
+
+  const calls = userAddresses.map((userAddress) =>
+    constructContractCall(
+      userAddress as '0x${string}',
+      tokenAddress as '0x${string}',
+      tokenId
+    )
+  )
+
+  const results = await client.multicall({
+    //@ts-ignore
+    contracts: calls
+  })
+}
+
+export const constructContractCall = (
+  userAddress: '0x${string}',
+  tokenAddress: '0x${string}',
+  tokenId?: string
+) => {
+  return {
+    address: tokenAddress,
+    abi: tokenId ? erc1155ABI : erc721ABI,
+    functionName: 'balanceOf',
+    args: tokenId ? [userAddress, tokenId] : [userAddress]
+  } as const
+}
