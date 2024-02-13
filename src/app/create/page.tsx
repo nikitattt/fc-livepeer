@@ -50,7 +50,7 @@ export default function Home() {
         height={929}
         src="/desc.png"
         alt="what is what in frame"
-        className="mt-12 lg:max-w-md"
+        className="mt-12 lg:max-w-md mx-auto"
       />
       <form
         action={createFrame}
