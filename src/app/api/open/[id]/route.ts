@@ -54,7 +54,7 @@ export async function POST(
     )
   }
 
-  console.log(wallets)
+  // console.log(wallets)
 
   const id = params.id
 
@@ -66,7 +66,7 @@ export async function POST(
 
   const data = JSON.parse(dataString) as VideoShareData
 
-  console.log(data)
+  // console.log(data)
 
   const requirement = data.requirement.split(':')
   const chain = requirement[0]
@@ -74,8 +74,6 @@ export async function POST(
   const tokenId = requirement[2]
 
   const ownershipPassed = await checkOwnership(wallets, chain, address, tokenId)
-
-  // using view created contract calls to check if any wallet in wallets owns token for the contract address
 
   let response
 
