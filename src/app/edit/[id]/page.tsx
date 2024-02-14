@@ -1,19 +1,16 @@
-import Redis from 'ioredis'
 import { VideoShareData } from '@/utils/types'
-import { v4 as uuidv4 } from 'uuid'
-import { randomBytes } from 'crypto'
+import Redis from 'ioredis'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 
-export default function Home() {
-  const createFrame = async (formData: FormData) => {
+export default async function Home({ params }: { params: { id: string } }) {
+  const updateFrame = async (formData: FormData) => {
     'use server'
 
     const redisClient = new Redis(process.env.REDIS_URL!)
 
-    const shareId = uuidv4()
-    const editId = randomBytes(4).toString('hex').slice(0, 8)
-
+    const editId = formData.get('editId')!.toString()
+    const shareId = formData.get('shareId')!.toString()
     const title = formData.get('title')!.toString()
     const requirementDescription = formData
       .get('requirementDescription')!
@@ -38,13 +35,24 @@ export default function Home() {
     redirect(`/create/${shareId}_${editId}`)
   }
 
+  const ids = params.id.split('_')
+  const shareId = ids[0]
+  const editId = ids[1]
+
+  const redisClient = new Redis(process.env.REDIS_URL!)
+
+  const dataString = await redisClient.get(shareId)
+
+  if (!dataString) {
+    throw Error('Frame data not found')
+  }
+
+  const data = JSON.parse(dataString) as VideoShareData
+
   return (
     <main className="flex flex-col text-center p-8 lg:p-16 mb-20">
       <div className="flex flex-col">
-        <p className="font-black text-green-400">Create token gated frame</p>
-        <p className="mt-12 max-w-lg mx-auto">
-          Please provide following data, so we can create a frame for you:
-        </p>
+        <p className="font-black text-green-400">Update frame</p>
       </div>
       <Image
         width={1146}
@@ -54,13 +62,16 @@ export default function Home() {
         className="mt-12 lg:max-w-md mx-auto"
       />
       <form
-        action={createFrame}
+        action={updateFrame}
         method="POST"
         className="mt-12 flex flex-col gap-6 mx-auto text-green-500 w-full max-w-md"
       >
+        <input type="hidden" name="editId" value={editId} />
+        <input type="hidden" name="shareId" value={shareId} />
         <div className="w-full">
           <input
             required
+            defaultValue={data.title}
             type="text"
             name="title"
             placeholder="Title"
@@ -74,6 +85,7 @@ export default function Home() {
         <div className="w-full">
           <input
             required
+            defaultValue={data.requirementDescription}
             type="text"
             name="requirementDescription"
             placeholder="Requirements Description"
@@ -87,6 +99,7 @@ export default function Home() {
         <div className="w-full">
           <input
             required
+            defaultValue={data.requirement}
             type="text"
             name="requirement"
             placeholder="Chain:Address:Optional Token Id"
@@ -111,6 +124,7 @@ export default function Home() {
         <div className="w-full">
           <input
             required
+            defaultValue={data.ownerFid}
             type="text"
             name="ownerFid"
             placeholder="Your Farcaster FID"
@@ -124,6 +138,7 @@ export default function Home() {
         <div className="w-full">
           <input
             required
+            defaultValue={data.playbackId}
             type="text"
             name="playbackId"
             placeholder="Playback ID"
@@ -138,7 +153,7 @@ export default function Home() {
           type="submit"
           className="bg-green-500/20 rounded-lg px-4 py-2 w-full max-w-lg font-bold"
         >
-          Create token gated frame
+          Update Frame
         </button>
       </form>
     </main>

@@ -21,11 +21,11 @@ export default function Home() {
               <p className="font-mono text-green-500">Create new frame</p>
             </div>
           </Link>
-          {/* <Link href="/edit">
+          <Link href="/edit">
             <div className="px-4 py-2 mt-4 w-max mx-auto bg-gray-900 rounded-lg">
               <p className="font-mono text-green-500">Edit existing</p>
             </div>
-          </Link> */}
+          </Link>
         </div>
       </div>
     </main>
