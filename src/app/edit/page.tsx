@@ -46,7 +46,8 @@ export default function Home() {
             className="bg-gray-900 rounded-lg px-4 py-2 w-full outline-green-500"
           />
           <p className="mt-1 text-start text-sm text-white font-mono">
-            Looking like this: <span className="text-red-500">3310afc7</span>.
+            Key looking like this:{' '}
+            <span className="text-red-500">3310afc7</span>.
           </p>
         </div>
         <button
