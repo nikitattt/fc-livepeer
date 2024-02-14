@@ -27,6 +27,17 @@ export default function Home() {
             </div>
           </Link>
         </div>
+        <div className="mt-12">
+          <p>
+            Support:{' '}
+            <a
+              href="https://warpcast.com/iamng"
+              className="text-purple-400 underline"
+            >
+              @iamng
+            </a>
+          </p>
+        </div>
       </div>
     </main>
   )
