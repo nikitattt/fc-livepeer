@@ -1,4 +1,5 @@
 import { VideoShareData } from '@/utils/types'
+import dayjs from 'dayjs'
 import Redis from 'ioredis'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
@@ -26,11 +27,11 @@ export default async function Home({ params }: { params: { id: string } }) {
       ownerFid: ownerFid,
       playbackId: playbackId,
       shareId: shareId,
-      editId: editId
+      editId: editId,
+      lastUpdatedAt: dayjs().toISOString()
     }
 
     await redisClient.set(shareId, JSON.stringify(dataToStore))
-    await redisClient.hset('editIdToShareId', editId, shareId)
 
     redirect(`/create/${shareId}_${editId}`)
   }

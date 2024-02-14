@@ -6,4 +6,6 @@ export interface VideoShareData {
   title: string
   requirementDescription: string
   requirement: string
+  createdAt?: string
+  lastUpdatedAt?: string
 }

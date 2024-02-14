@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { randomBytes } from 'crypto'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
+import dayjs from 'dayjs'
 
 export default function Home() {
   const createFrame = async (formData: FormData) => {
@@ -29,7 +30,9 @@ export default function Home() {
       ownerFid: ownerFid,
       playbackId: playbackId,
       shareId: shareId,
-      editId: editId
+      editId: editId,
+      createdAt: dayjs().toISOString(),
+      lastUpdatedAt: dayjs().toISOString()
     }
 
     await redisClient.set(shareId, JSON.stringify(dataToStore))
