@@ -93,7 +93,7 @@ export default function Home() {
             required
             type="text"
             name="requirement"
-            placeholder="Chain:Address:Optional Token Id"
+            placeholder="chain:address:token(optional)"
             maxLength={50}
             className="bg-gray-900 rounded-lg px-4 py-2 w-full outline-green-500"
           />
@@ -101,10 +101,10 @@ export default function Home() {
             Chain + ERC720 or ERC1155 contract address + optional token id used
             to token gate
             <br />
-            If ERC720 provide only address, like this:{' '}
+            If ERC720 provide only chain:address, like this:{' '}
             <span className="text-red-500">base:0x66...e468</span>.
             <br />
-            If ERC1155 provide address:id, like this:{' '}
+            If ERC1155 provide chain:address:id, like this:{' '}
             <span className="text-red-500">eth:0x66...e468:3</span>.
             <br />
             Supported chains: <span className="text-red-500">eth</span>,{' '}
