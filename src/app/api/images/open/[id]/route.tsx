@@ -10,6 +10,8 @@ let unboundedBlack = fs.readFileSync(unboundedBlackPath)
 
 const redisClient = new Redis(process.env.REDIS_URL!)
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
