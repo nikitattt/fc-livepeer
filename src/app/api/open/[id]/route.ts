@@ -98,7 +98,12 @@ export async function POST(
       }
     )
   } else {
+    const openseaChain = chain === 'eth' ? 'ethereum' : chain
+
     const imageUrl = `${process.env.HOST}/api/images/no-pass/${id}`
+    const collectionLink = tokenId
+      ? `https://opensea.io/assets/${openseaChain}/${address}/${tokenId}`
+      : `https://opensea.io/assets/${openseaChain}/${address}`
 
     response = new NextResponse(
       `<!DOCTYPE html>
@@ -109,6 +114,9 @@ export async function POST(
           <meta property="og:image" content="${imageUrl}" />
           <meta name="fc:frame" content="vNext" />
           <meta name="fc:frame:image" content="${imageUrl}" />
+          <meta name="fc:frame:button:1" content="See Collection" />
+          <meta name="fc:frame:button:1:action" content="link" />
+          <meta name="fc:frame:button:1:target" content="${collectionLink}" />
         </head>
         <body />
       </html>`,
