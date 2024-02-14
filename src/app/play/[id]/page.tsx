@@ -35,7 +35,7 @@ export default function Home() {
         <h1 className="mt-12 lg:mt-16 text-6xl font-bold">
           View gated video on Livepeer
         </h1>
-        <Link href="/" className="text-green-400 underline">
+        <Link href="/" className="text-green-500 underline">
           Make for my video
         </Link>
       </div>

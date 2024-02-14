@@ -11,7 +11,7 @@ export default function Home() {
           Make your{' '}
           <a
             href="https://livepeer.studio/"
-            className="text-green-400 underline"
+            className="text-green-500 underline"
           >
             Livepeer
           </a>{' '}
