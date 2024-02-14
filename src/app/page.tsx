@@ -8,8 +8,14 @@ export default function Home() {
         <p className="font-black text-purple-400">Farcaster Frame</p>
         <h1 className="mt-12 lg:mt-16 text-6xl font-bold">Livepeer Frame</h1>
         <p className="mt-12 max-w-lg mx-auto">
-          Make your <a href="https://livepeer.studio/">Livepeer</a> video/stream
-          available only to your NFT holders.
+          Make your{' '}
+          <a
+            href="https://livepeer.studio/"
+            className="text-green-400 underline"
+          >
+            Livepeer
+          </a>{' '}
+          video/stream available only to your NFT holders.
           <br />
           <br />
           Create a link to your video that will only be accessible to holders of
