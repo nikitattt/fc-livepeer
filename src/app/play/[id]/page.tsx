@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 
 export async function generateMetadata({
   params
@@ -34,6 +35,9 @@ export default function Home() {
         <h1 className="mt-12 lg:mt-16 text-6xl font-bold">
           View gated video on Livepeer
         </h1>
+        <Link href="/" className="text-green-400 underline">
+          Make for my video
+        </Link>
       </div>
     </main>
   )
