@@ -34,6 +34,7 @@ export default function Home() {
 
     await redisClient.set(shareId, JSON.stringify(dataToStore))
     await redisClient.hset('editIdToShareId', editId, shareId)
+    await redisClient.hset('editIdToFid', ownerFid, shareId)
 
     redirect(`/create/${shareId}_${editId}`)
   }
