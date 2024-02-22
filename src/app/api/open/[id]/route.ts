@@ -36,8 +36,8 @@ export async function POST(
           <title>No wallets!</title>
           <meta property="og:title" content="You need to add at least 1 wallet!" />
           <meta property="og:image" content="${imageUrl}" />
-          <meta name="fc:frame" content="vNext" />
-          <meta name="fc:frame:image" content="${imageUrl}" />
+          <meta property="fc:frame" content="vNext" />
+          <meta property="fc:frame:image" content="${imageUrl}" />
         </head>
         <body />
       </html>`,
@@ -92,11 +92,11 @@ export async function POST(
           <title>Watch the video!</title>
           <meta property="og:title" content="You can watch the video!" />
           <meta property="og:image" content="${imageUrl}" />
-          <meta name="fc:frame" content="vNext" />
-          <meta name="fc:frame:image" content="${imageUrl}" />
-          <meta name="fc:frame:button:1" content="Watch in browser" />
-          <meta name="fc:frame:button:1:action" content="link" />
-          <meta name="fc:frame:button:1:target" content="${postUrl}" />
+          <meta property="fc:frame" content="vNext" />
+          <meta property="fc:frame:image" content="${imageUrl}" />
+          <meta property="fc:frame:button:1" content="Watch in browser" />
+          <meta property="fc:frame:button:1:action" content="link" />
+          <meta property="fc:frame:button:1:target" content="${postUrl}" />
           ${videoMeta}
         </head>
         <body />
@@ -123,11 +123,11 @@ export async function POST(
           <title>Oops, no access!</title>
           <meta property="og:title" content="Access haven't been granted to you." />
           <meta property="og:image" content="${imageUrl}" />
-          <meta name="fc:frame" content="vNext" />
-          <meta name="fc:frame:image" content="${imageUrl}" />
-          <meta name="fc:frame:button:1" content="See Collection" />
-          <meta name="fc:frame:button:1:action" content="link" />
-          <meta name="fc:frame:button:1:target" content="${collectionLink}" />
+          <meta property="fc:frame" content="vNext" />
+          <meta property="fc:frame:image" content="${imageUrl}" />
+          <meta property="fc:frame:button:1" content="See Collection" />
+          <meta property="fc:frame:button:1:action" content="link" />
+          <meta property="fc:frame:button:1:target" content="${collectionLink}" />
         </head>
         <body />
       </html>`,
