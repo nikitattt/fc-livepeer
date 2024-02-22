@@ -77,6 +77,14 @@ export async function POST(
     const postUrl = `https://lvpr.tv?v=${data.playbackId}`
     const imageUrl = `${process.env.HOST}/all-good.jpg`
 
+    let videoMeta = ``
+
+    if (data.playbackUrl) {
+      videoMeta = `
+      <meta property="fc:frame:video" content="${data.playbackUrl}" />
+      <meta property="fc:frame:video:type" content="application/x-mpegURL" />`
+    }
+
     response = new NextResponse(
       `<!DOCTYPE html>
       <html>
@@ -86,9 +94,10 @@ export async function POST(
           <meta property="og:image" content="${imageUrl}" />
           <meta name="fc:frame" content="vNext" />
           <meta name="fc:frame:image" content="${imageUrl}" />
-          <meta name="fc:frame:button:1" content="Watch video" />
+          <meta name="fc:frame:button:1" content="Watch in browser" />
           <meta name="fc:frame:button:1:action" content="link" />
           <meta name="fc:frame:button:1:target" content="${postUrl}" />
+          ${videoMeta}
         </head>
         <body />
       </html>`,

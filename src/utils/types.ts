@@ -3,6 +3,7 @@ export interface VideoShareData {
   editId: string
   ownerFid: number
   playbackId: string
+  playbackUrl?: string
   title: string
   requirementDescription: string
   requirement: string

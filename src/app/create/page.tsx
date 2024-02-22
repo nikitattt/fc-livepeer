@@ -22,6 +22,7 @@ export default function Home() {
     const requirement = formData.get('requirement')!.toString()
     const ownerFid = Number(formData.get('ownerFid')!.toString())
     const playbackId = formData.get('playbackId')!.toString()
+    const playbackUrl = formData.get('playbackUrl')?.toString()
 
     const dataToStore: VideoShareData = {
       title: title,
@@ -29,6 +30,7 @@ export default function Home() {
       requirement: requirement,
       ownerFid: ownerFid,
       playbackId: playbackId,
+      playbackUrl: playbackUrl,
       shareId: shareId,
       editId: editId,
       createdAt: dayjs().toISOString(),
@@ -136,6 +138,18 @@ export default function Home() {
           />
           <p className="mt-1 text-start text-sm text-white font-mono">
             Playback ID of your video/stream
+          </p>
+        </div>
+        <div className="w-full">
+          <input
+            type="text"
+            name="playbackUrl"
+            placeholder="Playback URL"
+            className="bg-gray-900 rounded-lg px-4 py-2 w-full outline-green-500"
+          />
+          <p className="mt-1 text-start text-sm text-white font-mono">
+            (Optional) Playback URL of your video/stream. This allows video to
+            start playing in the frame, if supported by the farcaster client.
           </p>
         </div>
         <button

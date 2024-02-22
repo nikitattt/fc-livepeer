@@ -150,6 +150,19 @@ export default async function Home({ params }: { params: { id: string } }) {
             Playback ID of your video/stream
           </p>
         </div>
+        <div className="w-full">
+          <input
+            defaultValue={data.playbackUrl}
+            type="text"
+            name="playbackUrl"
+            placeholder="Playback URL"
+            className="bg-gray-900 rounded-lg px-4 py-2 w-full outline-green-500"
+          />
+          <p className="mt-1 text-start text-sm text-white font-mono">
+            (Optional) Playback URL of your video/stream. This allows video to
+            start playing in the frame if supported
+          </p>
+        </div>
         <button
           type="submit"
           className="bg-green-500/20 rounded-lg px-4 py-2 w-full max-w-lg font-bold"
